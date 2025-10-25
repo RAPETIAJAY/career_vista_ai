@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerVista AI - Redirecting...</title>
+    <script>
+        // GitHub Pages SPA redirect
+        // This script takes the current URL and redirects to index.html with the path as a query parameter
+        const path = window.location.pathname.slice(1);
+        if (path) {
+            window.location.replace(
+                window.location.origin + '/frontend/?redirect=' + encodeURIComponent(path)
+            );
+        } else {
+            window.location.replace(window.location.origin + '/frontend/');
+        }
+    </script>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 50px; font-family: Arial, sans-serif;">
+        <h2>Redirecting...</h2>
+        <p>If you're not automatically redirected, <a href="/frontend/">click here</a>.</p>
+    </div>
+</body>
+</html>

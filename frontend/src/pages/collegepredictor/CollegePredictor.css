@@ -1,0 +1,346 @@
+.college-predictor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.college-predictor .MuiCard-root {
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.95);
+  margin-bottom: 2rem;
+}
+
+.score-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+} 
+
+.score-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  border-color: #667eea;
+}
+
+.college-predictor .MuiTabs-root {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.college-predictor .MuiTab-root {
+  border-radius: 8px;
+  margin: 0 0.25rem;
+  transition: all 0.3s ease;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.college-predictor .MuiTab-root.Mui-selected {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+}
+
+.college-predictor .MuiButton-contained {
+  background: linear-gradient(45deg, #667eea, #764ba2) !important;
+  border-radius: 25px !important;
+  padding: 12px 30px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+.college-predictor .MuiButton-contained:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6) !important;
+}
+
+.college-predictor .MuiButton-outlined {
+  border: 2px solid #667eea !important;
+  color: #667eea !important;
+  border-radius: 25px !important;
+  padding: 10px 28px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.college-predictor .MuiButton-outlined:hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+.college-predictor .MuiTableContainer-root {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.college-predictor .MuiTableHead-root {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+}
+
+.college-predictor .MuiTableHead-root .MuiTableCell-root {
+  color: white;
+  font-weight: 600;
+  border: none;
+}
+
+.college-predictor .MuiTableRow-root:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
+.college-predictor .MuiTableCell-root {
+  border-color: rgba(102, 126, 234, 0.1);
+}
+
+.probability-chip {
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.category-safe {
+  background: linear-gradient(45deg, #4caf50, #66bb6a);
+  color: white;
+}
+
+.category-moderate {
+  background: linear-gradient(45deg, #ff9800, #ffb74d);
+  color: white;
+}
+
+.category-ambitious {
+  background: linear-gradient(45deg, #f44336, #ef5350);
+  color: white;
+}
+
+.comparison-card {
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(45deg, #667eea, #764ba2) border-box;
+  transition: all 0.3s ease;
+}
+
+.comparison-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.roi-positive {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.roi-negative {
+  color: #f44336;
+  font-weight: 600;
+}
+
+.pros-chip {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  margin: 2px;
+}
+
+.cons-chip {
+  background-color: #fff3e0;
+  color: #ef6c00;
+  margin: 2px;
+}
+
+.scenario-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.scenario-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.best-option-highlight {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(102, 187, 106, 0.1));
+  border-left: 4px solid #4caf50;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.college-predictor .MuiAlert-root {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.college-predictor .MuiDialog-paper {
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);}
+
+.college-predictor .MuiDialogTitle-root {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  text-align: center;
+  font-weight: 600;
+}
+
+.entrance-score-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.score-summary-item {
+  background: rgba(102, 126, 234, 0.1);
+  padding: 1rem;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+  flex: 1;
+  min-width: 200px;
+}
+
+.prediction-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.college-selection-info {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.loading-overlay {
+  position: relative;
+}
+
+.loading-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .college-predictor {
+    padding: 1rem;
+  }
+  
+  .entrance-score-summary {
+    flex-direction: column;
+  }
+  
+  .prediction-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .college-predictor .MuiButton-contained,
+  .college-predictor .MuiButton-outlined {
+    padding: 10px 20px !important;
+    font-size: 0.875rem !important;
+  }
+  
+  .score-summary-item {
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .prediction-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .college-predictor .MuiTabs-root {
+    padding: 0.25rem;
+  }
+  
+  .college-predictor .MuiTab-root {
+    font-size: 0.75rem;
+    padding: 8px 12px;
+  }
+}
+
+/* Animation for new predictions */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.prediction-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+/* Checkbox styling */
+.college-predictor input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #667eea;
+  cursor: pointer;
+}
+
+/* Tooltip styling */
+.college-predictor .MuiTooltip-tooltip {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+/* Success states */
+.success-highlight {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(102, 187, 106, 0.1));
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+/* Warning states */
+.warning-highlight {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
+  border: 2px solid #ff9800;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
+}

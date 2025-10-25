@@ -1,0 +1,15 @@
+src/
+node_modules/
+.git/
+.env.example
+README.md
+tsconfig.json
+pnpm-lock.yaml
+package-lock.json
+*.log
+*.md
+.vscode/
+.idea/
+.gitignore
+index.js
+api/server.js
