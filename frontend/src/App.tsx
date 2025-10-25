@@ -32,7 +32,7 @@ import SecureTestResults from './pages/test/SecureTestResults'
 import ScholarshipPage from './pages/scholarship/scholarship'
 import ProtectedRoute from './components/ProtectedRoute'
 import enterpriseTheme from './theme/enterpriseTheme'
-import FloatingAI from './components/FloatingAI'
+//import FloatingAI from './components/FloatingAI'
 
 // Legal pages
 import {
