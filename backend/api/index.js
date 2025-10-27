@@ -1,23 +1,8 @@
-const express = require('express');
-const cors = require('cors');
+// Vercel Serverless Function Handler
+// This file imports and exports the Express app for Vercel deployment
 
-const app = express();
+// Import the compiled TypeScript app
+const app = require('../dist/index.js').default;
 
-// CORS
-app.use(cors());
-app.use(express.json());
-
-// Simple health check
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'CareerVista AI API',
-    status: 'healthy',
-    timestamp: new Date().toISOString()
-  });
-});
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
-
+// Export for Vercel serverless functions
 module.exports = app;
