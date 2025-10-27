@@ -19,7 +19,6 @@ Thumbs.db
 
 # Build
 build/
-dist/
 
 # Misc
 coverage/
