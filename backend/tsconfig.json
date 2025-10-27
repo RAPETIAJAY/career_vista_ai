@@ -9,12 +9,15 @@
     "allowJs": true,
     "checkJs": false,
     "noEmitOnError": false,
+    "noImplicitAny": false,
     "strict": false,
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": false
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.test.ts"],
-  "compileOnSave": false,
-  "transpileOnly": true
+  "exclude": ["node_modules", "**/*.test.ts", "dist"],
+  "ts-node": {
+    "transpileOnly": true
+  }
 }
