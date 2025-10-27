@@ -8,9 +8,9 @@ let app;
 
 try {
   // Debug: Check what files exist
-  const distPath = path.join(__dirname, 'dist');
+  const distPath = path.join(__dirname, '..', 'dist');
   const distExists = fs.existsSync(distPath);
-  const distIndexExists = fs.existsSync(path.join(__dirname, 'dist', 'index.js'));
+  const distIndexExists = fs.existsSync(path.join(__dirname, '..', 'dist', 'index.js'));
   
   console.log('Debug Info:', {
     __dirname,
@@ -22,7 +22,7 @@ try {
   });
   
   // Try to load the compiled Express app
-  const expressModule = require('./dist/index.js');
+  const expressModule = require('../dist/index.js');
   app = expressModule.default || expressModule;
   
   if (!app || typeof app !== 'function') {
