@@ -11,5 +11,4 @@ package-lock.json
 .vscode/
 .idea/
 .gitignore
-index.js
 api/server.js
