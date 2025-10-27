@@ -8,18 +8,22 @@ let app;
 
 try {
   // Debug: Check what files exist
-  const distPath = path.join(__dirname, '..', 'dist');
-  const distExists = fs.existsSync(distPath);
-  const distIndexExists = fs.existsSync(path.join(__dirname, '..', 'dist', 'index.js'));
+  const parentDir = path.join(__dirname, '..');
+  const distPath = path.join(parentDir, 'dist');
+  const distIndexPath = path.join(distPath, 'index.js');
   
-  console.log('Debug Info:', {
+  const debug = {
     __dirname,
+    parentDir,
     distPath,
-    distExists,
-    distIndexExists,
+    distExists: fs.existsSync(distPath),
+    distIndexExists: fs.existsSync(distIndexPath),
     cwd: process.cwd(),
-    files: distExists ? fs.readdirSync(distPath).slice(0, 10) : 'dist not found'
-  });
+    parentDirContents: fs.existsSync(parentDir) ? fs.readdirSync(parentDir) : 'not found',
+    distContents: fs.existsSync(distPath) ? fs.readdirSync(distPath).slice(0, 10) : 'dist not found'
+  };
+  
+  console.log('Debug Info:', JSON.stringify(debug, null, 2));
   
   // Try to load the compiled Express app
   const expressModule = require('../dist/index.js');
@@ -28,6 +32,8 @@ try {
   if (!app || typeof app !== 'function') {
     throw new Error('Express app not found in dist/index.js');
   }
+  
+  console.log('✓ Express app loaded successfully');
 } catch (error) {
   console.error('Error loading Express app:', error);
   
@@ -41,7 +47,7 @@ try {
       stack: error.stack,
       __dirname,
       cwd: process.cwd(),
-      hint: 'Check Vercel build logs'
+      hint: 'Check Vercel build logs and runtime logs'
     });
   });
 }
