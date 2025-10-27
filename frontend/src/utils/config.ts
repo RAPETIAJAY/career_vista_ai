@@ -5,17 +5,19 @@ export const isGitHubPages = window.location.hostname.includes('github.io')
 
 // API Configuration
 export const getApiConfig = () => {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+  // Use Vercel backend by default, fallback to localhost for development
+  const apiUrl = import.meta.env.VITE_API_URL || 
+    (isDevelopment ? 'http://localhost:8080' : 'https://career-vista-backend.vercel.app')
   
   // If running on GitHub Pages and trying to connect to localhost
   if (isGitHubPages && apiUrl.includes('localhost')) {
     console.warn('🚨 GitHub Pages detected with localhost API - this will not work!')
-    console.warn('💡 Consider deploying your backend or using a demo API')
+    console.warn('💡 Using production backend instead')
     
     return {
-      baseURL: 'https://jsonplaceholder.typicode.com', // Fallback demo API
-      isDemoMode: true,
-      originalUrl: apiUrl
+      baseURL: 'https://career-vista-backend.vercel.app/api',
+      isDemoMode: false,
+      originalUrl: 'https://career-vista-backend.vercel.app'
     }
   }
   
