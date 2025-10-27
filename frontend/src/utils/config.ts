@@ -30,7 +30,8 @@ export const getApiConfig = () => {
 
 // Google OAuth Configuration
 export const getGoogleClientId = () => {
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || 
+    '709011218301-9pndhvj533hm93lgbn9oec1qgm551dta.apps.googleusercontent.com'
   
   if (!clientId) {
     console.error('❌ VITE_GOOGLE_CLIENT_ID not configured')
