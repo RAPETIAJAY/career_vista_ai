@@ -1,0 +1,9 @@
+  clientId = clientId.replace(/^["']|["']$/g, '')
+  
+  if (!clientId) {
+    console.error(' VITE_GOOGLE_CLIENT_ID not configured')
+    return null
+  }
+  
+  return clientId
+}
