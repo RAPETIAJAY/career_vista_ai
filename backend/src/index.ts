@@ -37,7 +37,10 @@ const corsOptions = {
     'http://localhost:5173', 
     'http://127.0.0.1:3000',
     'http://127.0.0.1:5173',
-    'https://career-vista.github.io'
+    'https://career-vista.github.io',
+    'https://career-vista-ai-12.vercel.app', // Your Vercel frontend
+    /^https:\/\/.*\.railway\.app$/, // Railway domains
+    /^https:\/\/.*\.vercel\.app$/ // All Vercel preview deployments
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
