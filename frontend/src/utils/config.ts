@@ -7,7 +7,7 @@ export const isGitHubPages = window.location.hostname.includes('github.io')
 export const getApiConfig = () => {
   // Use Vercel backend by default, fallback to localhost for development
   const apiUrl = import.meta.env.VITE_API_URL || 
-    (isDevelopment ? 'http://localhost:8080' : 'https://career-vista-backend.vercel.app')
+    (isDevelopment ? 'http://localhost:8080' : 'https://career-vista-background.vercel.app')
   
   // If running on GitHub Pages and trying to connect to localhost
   if (isGitHubPages && apiUrl.includes('localhost')) {
@@ -15,9 +15,9 @@ export const getApiConfig = () => {
     console.warn('💡 Using production backend instead')
     
     return {
-      baseURL: 'https://career-vista-backend.vercel.app/api',
+      baseURL: 'https://career-vista-background.vercel.app/api',
       isDemoMode: false,
-      originalUrl: 'https://career-vista-backend.vercel.app'
+      originalUrl: 'https://career-vista-background.vercel.app'
     }
   }
   
