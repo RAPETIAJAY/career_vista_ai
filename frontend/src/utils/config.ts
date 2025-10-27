@@ -28,15 +28,32 @@ export const getApiConfig = () => {
   }
 }
 
+// Get API URL (strips quotes if present)
+export const getApiUrl = () => {
+  const isDev = import.meta.env.DEV
+  let apiUrl = import.meta.env.VITE_API_URL || ''
+  
+  // Remove quotes if present in environment variable
+  apiUrl = apiUrl.replace(/^[""'']|[""'']$/g, '')
+  
+  // Use localhost in dev, env variable or fallback in production
+  return isDev ? 'http://localhost:8080' : (apiUrl || 'https://career-vista-background.vercel.app')
+}
+
 // Google OAuth Configuration
 export const getGoogleClientId = () => {
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || 
-    '709011218301-9pndhvj533hm93lgbn9oec1qgm551dta.apps.googleusercontent.com'
+  let clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''709011218301-9pndhvj533hm93lgbn9oec1qgm551dta.apps.googleusercontent.com''
+  
+  // Remove quotes if present in environment variable
+  clientId = clientId.replace(/^[""'']|[""'']$/g, '')
   
   if (!clientId) {
-    console.error('❌ VITE_GOOGLE_CLIENT_ID not configured')
+    console.error('' VITE_GOOGLE_CLIENT_ID not configured'')
     return null
   }
+  
+  return clientId
+}
   
   return clientId
 }

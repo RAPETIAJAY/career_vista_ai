@@ -5,8 +5,19 @@ import { getGoogleClientId } from './config'
 
 // Helper function to get API URL
 const getApiUrl = () => {
-  const isDev = import.meta.env.DEV; const baseUrl = isDev ? 'http://localhost:8080' : 'https://career-vista-background.vercel.app'
+  const isDev = import.meta.env.DEV
+  
+  // Get API URL from environment variable and strip any quotes
+  let apiUrl = import.meta.env.VITE_API_URL || ''
+  
+  // Remove quotes if present
+  apiUrl = apiUrl.replace(/^[""'']|[""'']$/g, '')
+  
+  // Use localhost in dev, env variable or fallback in production
+  const baseUrl = isDev ? 'http://localhost:8080' : (apiUrl || 'https://career-vista-background.vercel.app')
+  
   return `${baseUrl}/api`
+}/api`
 }
 
 // Session configuration
@@ -494,3 +505,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     </AuthContext.Provider>
   )
 }
+
