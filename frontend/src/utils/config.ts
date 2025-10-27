@@ -54,9 +54,6 @@ export const getGoogleClientId = () => {
   
   return clientId
 }
-  
-  return clientId
-}
 
 // Demo mode banner
 export const showDemoModeWarning = () => {

@@ -18,7 +18,7 @@ const getApiUrl = () => {
   
   return `${baseUrl}/api`
 }
-}
+
 
 // Session configuration
 const SESSION_DURATION_DAYS = 2
