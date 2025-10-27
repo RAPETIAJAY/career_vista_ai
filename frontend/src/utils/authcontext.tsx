@@ -5,7 +5,7 @@ import { getGoogleClientId } from './config'
 
 // Helper function to get API URL
 const getApiUrl = () => {
-  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+  const isDev = import.meta.env.DEV; const baseUrl = isDev ? 'http://localhost:8080' : 'https://career-vista-background.vercel.app'
   return `${baseUrl}/api`
 }
 
