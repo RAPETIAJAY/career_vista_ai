@@ -338,7 +338,7 @@ export const googleSignIn = async (req: Request, res: Response) => {
     }
     logger.info('🔍 Step 2: Token exists');
 
-    const clientId = process.env.GOOGLE_CLIENT_ID || '664830741958-ngfatn727gjfnim44id86gdjlo390rlb.apps.googleusercontent.com';
+    const clientId = process.env.GOOGLE_CLIENT_ID || '709011218301-9pndhvj533hm93lgbn9oec1qgm551dta.apps.googleusercontent.com';
     logger.info('🔍 Step 3: Retrieved client ID from env');
     logger.info('🔍 Environment debug:', {
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
