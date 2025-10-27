@@ -8,6 +8,9 @@ const logFormat = winston.format.combine(
   })
 );
 
+// Determine if running in serverless environment
+const isServerless = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME;
+
 // Create logger instance
 export const logger = winston.createLogger({
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
@@ -20,8 +23,8 @@ export const logger = winston.createLogger({
         logFormat
       )
     } as any),
-    // File transport for production
-    ...(process.env.NODE_ENV === 'production' ? [
+    // File transport only for non-serverless production
+    ...(process.env.NODE_ENV === 'production' && !isServerless ? [
       new winston.transports.File({ filename: 'logs/error.log', level: 'error' } as any),
       new winston.transports.File({ filename: 'logs/combined.log' } as any)
     ] : [])

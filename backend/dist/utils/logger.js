@@ -9,6 +9,8 @@ const winston_1 = __importDefault(require("winston"));
 const logFormat = winston_1.default.format.combine(winston_1.default.format.timestamp(), winston_1.default.format.printf(({ timestamp, level, message }) => {
     return `${timestamp} [${level.toUpperCase()}]: ${message}`;
 }));
+// Determine if running in serverless environment
+const isServerless = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME;
 // Create logger instance
 exports.logger = winston_1.default.createLogger({
     level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
@@ -18,8 +20,8 @@ exports.logger = winston_1.default.createLogger({
         new winston_1.default.transports.Console({
             format: winston_1.default.format.combine(winston_1.default.format.colorize(), logFormat)
         }),
-        // File transport for production
-        ...(process.env.NODE_ENV === 'production' ? [
+        // File transport only for non-serverless production
+        ...(process.env.NODE_ENV === 'production' && !isServerless ? [
             new winston_1.default.transports.File({ filename: 'logs/error.log', level: 'error' }),
             new winston_1.default.transports.File({ filename: 'logs/combined.log' })
         ] : [])
