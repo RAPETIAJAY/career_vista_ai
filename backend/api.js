@@ -5,7 +5,7 @@ let app;
 
 try {
   // Try to load the compiled Express app
-  const expressModule = require('../dist/index.js');
+  const expressModule = require('./dist/index.js');
   app = expressModule.default || expressModule;
   
   if (!app || typeof app !== 'function') {
