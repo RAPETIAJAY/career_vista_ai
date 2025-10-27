@@ -11,13 +11,13 @@ const getApiUrl = () => {
   let apiUrl = import.meta.env.VITE_API_URL || ''
   
   // Remove quotes if present
-  apiUrl = apiUrl.replace(/^[""'']|[""'']$/g, '')
+  apiUrl = apiUrl.replace(/^["'\'']|["'\'']$/g, '')
   
   // Use localhost in dev, env variable or fallback in production
   const baseUrl = isDev ? 'http://localhost:8080' : (apiUrl || 'https://career-vista-background.vercel.app')
   
   return `${baseUrl}/api`
-}/api`
+}
 }
 
 // Session configuration
