@@ -1,8 +1,8 @@
 // Vercel Serverless Function Handler
-// This file imports and exports the Express app for Vercel deployment
+const express = require('../dist/index.js');
 
-// Import the compiled TypeScript app
-const app = require('../dist/index.js').default || require('../dist/index.js');
+// Get the Express app (handle both .default and direct export)
+const app = express.default || express;
 
-// Export for Vercel serverless functions
+// Export for Vercel
 module.exports = app;
