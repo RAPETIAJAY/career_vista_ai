@@ -6,13 +6,41 @@ async function getOpenAIClient() {
   if (!apiKey) return null
   const mod = await import('openai')
   const OpenAI = mod.default as any
-  return new OpenAI({ apiKey })
+  
+  // Configure for OpenRouter if base URL is set
+  const config: any = { apiKey }
+  if (process.env.OPENAI_BASE_URL) {
+    config.baseURL = process.env.OPENAI_BASE_URL
+    config.defaultHeaders = {
+      'HTTP-Referer': 'https://careervista.ai',
+      'X-Title': 'CareerVista AI'
+    }
+  }
+  
+  return new OpenAI(config)
 }
+
+// OpenRouter Free Models Configuration
+const FREE_MODELS = [
+  'google/gemini-2.0-flash-exp:free',        // Latest Gemini Flash (Best for general tasks)
+  'google/gemini-flash-1.5:free',            // Gemini Flash 1.5
+  'meta-llama/llama-3.2-3b-instruct:free',   // Meta Llama 3.2 3B
+  'meta-llama/llama-3.2-1b-instruct:free',   // Meta Llama 3.2 1B  
+  'microsoft/phi-3-mini-128k-instruct:free', // Microsoft Phi-3 Mini
+  'microsoft/phi-3-medium-128k-instruct:free', // Microsoft Phi-3 Medium
+  'qwen/qwen-2-7b-instruct:free',            // Alibaba Qwen 2
+  'huggingfaceh4/zephyr-7b-beta:free',       // Zephyr 7B
+  'openchat/openchat-7b:free',               // OpenChat 7B
+  'nousresearch/hermes-3-llama-3.1-405b:free', // Hermes 3 405B
+  'liquid/lfm-40b:free',                     // Liquid Foundation Model 40B
+  'mistralai/mistral-7b-instruct:free'       // Mistral 7B
+]
 
 // Central AI config and helpers
 const AI_CONFIG = {
   enabled: (process.env.AI_ENABLED ?? 'true') !== 'false',
-  model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+  model: process.env.OPENAI_MODEL || FREE_MODELS[0], // Default to best free model
+  freeModels: FREE_MODELS,
   temperature: 0.2,
   timeoutMs: Number(process.env.AI_TIMEOUT_MS || 15000),
   maxRetries: Number(process.env.AI_MAX_RETRIES || 2),

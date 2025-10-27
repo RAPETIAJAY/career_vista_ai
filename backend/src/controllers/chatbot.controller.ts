@@ -3,9 +3,9 @@ import axios from 'axios';
 import { logger } from '../utils/logger';
 import User from '../models/User';
 
-// OpenRouter API configuration
-const OPENROUTER_API_KEY = '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';
-const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
+// OpenRouter API configuration - using environment variable
+const OPENROUTER_API_KEY = process.env.OPENAI_API_KEY || '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';
+const OPENROUTER_BASE_URL = process.env.OPENAI_BASE_URL || 'https://openrouter.ai/api/v1';
 
 // Simple rate limiting - store last request time per IP
 const requestTimestamps: Map<string, number> = new Map();
@@ -213,11 +213,15 @@ export const chatWithCounselorBot = async (req: Request, res: Response) => {
 
     // Call OpenRouter API with fallback models - All FREE tier
     const models = [
-      // Latest and most capable free models
-      'meta-llama/llama-3.3-70b-instruct:free', // Primary - Llama 3.3 70B (Most capable)
-      'meta-llama/llama-3.1-8b-instruct:free', // Llama 3.1 8B
-      'meta-llama/llama-3.2-3b-instruct:free', // Llama 3.2 3B
-      'meta-llama/llama-3.2-1b-instruct:free', // Llama 3.2 1B (Fast)
+      // Latest and most capable free models (2024-2025)
+      'google/gemini-2.0-flash-exp:free', // Primary - Latest Gemini Flash (Best overall)
+      'google/gemini-flash-1.5:free', // Gemini Flash 1.5 (Excellent quality)
+      'nousresearch/hermes-3-llama-3.1-405b:free', // Hermes 3 405B (Very powerful)
+      'liquid/lfm-40b:free', // Liquid Foundation Model 40B (Great quality)
+      'meta-llama/llama-3.3-70b-instruct:free', // Llama 3.3 70B (Most capable Llama)
+      'meta-llama/llama-3.1-8b-instruct:free', // Llama 3.1 8B (Good balance)
+      'meta-llama/llama-3.2-3b-instruct:free', // Llama 3.2 3B (Fast)
+      'meta-llama/llama-3.2-1b-instruct:free', // Llama 3.2 1B (Very fast)
       'mistralai/mistral-7b-instruct:free', // Mistral 7B
       'huggingface/zephyr-7b-beta:free', // Zephyr 7B
       'openchat/openchat-7b:free', // OpenChat 7B
