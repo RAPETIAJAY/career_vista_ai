@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { getGoogleClientId } from './config'
 
 // Helper function to get API URL
 const getApiUrl = () => {
@@ -213,7 +214,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error('Google authentication is disabled in demo mode. Please run locally for full functionality.')
       }
 
-      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined
+      const clientId = getGoogleClientId()
       console.log('🔍 [Google Auth] Client ID:', clientId ? 'Found' : 'Missing')
       
       if (!clientId || clientId.trim() === '') {
