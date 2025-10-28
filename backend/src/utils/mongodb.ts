@@ -34,11 +34,10 @@ export const connectDB = async () => {
     const result = await mongoose.connect(MONGODB_URI, {
       maxPoolSize: 10,
       minPoolSize: 2,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 30000, // Increased from 5000ms to 30000ms for serverless cold starts
       socketTimeoutMS: 45000,
       family: 4,
-      // Add these for better serverless performance
-      connectTimeoutMS: 10000,
+      connectTimeoutMS: 30000, // Increased from 10000ms to 30000ms
       heartbeatFrequencyMS: 10000,
     });
 
