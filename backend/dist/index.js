@@ -7,8 +7,8 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const logger_1 = require("./utils/logger");
+const mongodb_1 = require("./utils/mongodb");
 // Import routes
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
@@ -58,29 +58,9 @@ app.use((req, res, next) => {
     });
     next();
 });
-// Connect to MongoDB with serverless-optimized settings
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-    logger_1.logger.error('MONGODB_URI is not set in environment variables.');
-    process.exit(1);
-}
-// Serverless-friendly MongoDB connection options
-mongoose_1.default.connect(MONGODB_URI, {
-    maxPoolSize: 10, // Maintain up to 10 socket connections
-    minPoolSize: 2,
-    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-    family: 4 // Use IPv4, skip trying IPv6
-})
-    .then(() => {
-    logger_1.logger.info('✅ Connected to MongoDB');
-})
-    .catch((error) => {
-    logger_1.logger.error('❌ MongoDB connection error:', error);
-    // Don't exit in serverless - let it retry on next invocation
-    if (process.env.VERCEL !== '1') {
-        process.exit(1);
-    }
+// Initialize MongoDB connection (cached for serverless)
+(0, mongodb_1.connectDB)().catch((error) => {
+    logger_1.logger.error('❌ Failed to connect to MongoDB:', error);
 });
 // Routes
 logger_1.logger.info('🛣️ Registering auth routes...');
