@@ -4,6 +4,12 @@ import { logger } from './logger';
 let isConnected = false;
 
 export const connectDB = async () => {
+  logger.info('🔍 connectDB called. Current state:', {
+    isConnected,
+    readyState: mongoose.connection.readyState,
+    hasMongoUri: !!process.env.MONGODB_URI
+  });
+
   // If already connected, return immediately
   if (isConnected && mongoose.connection.readyState === 1) {
     logger.info('✅ Using existing MongoDB connection');
@@ -12,17 +18,20 @@ export const connectDB = async () => {
 
   const MONGODB_URI = process.env.MONGODB_URI;
   if (!MONGODB_URI) {
+    logger.error('❌ MONGODB_URI not found in environment variables');
     throw new Error('MONGODB_URI is not set in environment variables');
   }
 
   try {
-    logger.info('🔄 Connecting to MongoDB...');
+    logger.info('🔄 Connecting to MongoDB...', {
+      currentReadyState: mongoose.connection.readyState
+    });
     
     // Set mongoose options before connecting
     mongoose.set('strictQuery', false);
     mongoose.set('bufferCommands', false); // Disable buffering to fail fast
     
-    await mongoose.connect(MONGODB_URI, {
+    const result = await mongoose.connect(MONGODB_URI, {
       maxPoolSize: 10,
       minPoolSize: 2,
       serverSelectionTimeoutMS: 5000,
@@ -34,9 +43,17 @@ export const connectDB = async () => {
     });
 
     isConnected = true;
-    logger.info('✅ Connected to MongoDB');
+    logger.info('✅ Connected to MongoDB', {
+      readyState: mongoose.connection.readyState,
+      host: mongoose.connection.host,
+      name: mongoose.connection.name
+    });
   } catch (error: any) {
-    logger.error('❌ MongoDB connection error:', error.message);
+    logger.error('❌ MongoDB connection error:', {
+      message: error.message,
+      name: error.name,
+      code: error.code
+    });
     isConnected = false;
     throw error;
   }

@@ -8,6 +8,11 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const logger_1 = require("./logger");
 let isConnected = false;
 const connectDB = async () => {
+    logger_1.logger.info('🔍 connectDB called. Current state:', {
+        isConnected,
+        readyState: mongoose_1.default.connection.readyState,
+        hasMongoUri: !!process.env.MONGODB_URI
+    });
     // If already connected, return immediately
     if (isConnected && mongoose_1.default.connection.readyState === 1) {
         logger_1.logger.info('✅ Using existing MongoDB connection');
@@ -15,14 +20,17 @@ const connectDB = async () => {
     }
     const MONGODB_URI = process.env.MONGODB_URI;
     if (!MONGODB_URI) {
+        logger_1.logger.error('❌ MONGODB_URI not found in environment variables');
         throw new Error('MONGODB_URI is not set in environment variables');
     }
     try {
-        logger_1.logger.info('🔄 Connecting to MongoDB...');
+        logger_1.logger.info('🔄 Connecting to MongoDB...', {
+            currentReadyState: mongoose_1.default.connection.readyState
+        });
         // Set mongoose options before connecting
         mongoose_1.default.set('strictQuery', false);
         mongoose_1.default.set('bufferCommands', false); // Disable buffering to fail fast
-        await mongoose_1.default.connect(MONGODB_URI, {
+        const result = await mongoose_1.default.connect(MONGODB_URI, {
             maxPoolSize: 10,
             minPoolSize: 2,
             serverSelectionTimeoutMS: 5000,
@@ -33,10 +41,18 @@ const connectDB = async () => {
             heartbeatFrequencyMS: 10000,
         });
         isConnected = true;
-        logger_1.logger.info('✅ Connected to MongoDB');
+        logger_1.logger.info('✅ Connected to MongoDB', {
+            readyState: mongoose_1.default.connection.readyState,
+            host: mongoose_1.default.connection.host,
+            name: mongoose_1.default.connection.name
+        });
     }
     catch (error) {
-        logger_1.logger.error('❌ MongoDB connection error:', error.message);
+        logger_1.logger.error('❌ MongoDB connection error:', {
+            message: error.message,
+            name: error.name,
+            code: error.code
+        });
         isConnected = false;
         throw error;
     }
