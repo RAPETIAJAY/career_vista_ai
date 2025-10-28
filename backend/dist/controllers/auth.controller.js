@@ -286,20 +286,25 @@ const loginWithPassword = async (req, res) => {
 };
 exports.loginWithPassword = loginWithPassword;
 /**
- * Google Sign In
+ * Google Sign In - Version 2.1 - 2025-10-28T10:20:00Z
  */
 const googleSignIn = async (req, res) => {
+    const requestId = Math.random().toString(36).substring(7);
     try {
-        logger_1.logger.info('🔍 [v2.0] Google Sign-In Request: Starting function');
-        logger_1.logger.info('🔍 [v2.0] Request body keys:', Object.keys(req.body));
+        logger_1.logger.info(`🔍 [v2.1-${requestId}] Google Sign-In Request: Starting function`);
+        logger_1.logger.info(`🔍 [v2.1-${requestId}] Request body keys:`, Object.keys(req.body));
+        logger_1.logger.info(`🔍 [v2.1-${requestId}] Environment check:`, {
+            hasMongoUri: !!process.env.MONGODB_URI,
+            mongoUriLength: process.env.MONGODB_URI?.length || 0
+        });
         // Ensure MongoDB connection is established
-        logger_1.logger.info('🔌 [v2.0] Ensuring MongoDB connection...');
+        logger_1.logger.info(`🔌 [v2.1-${requestId}] Ensuring MongoDB connection...`);
         try {
             await (0, mongodb_1.connectDB)();
-            logger_1.logger.info('✅ [v2.0] MongoDB connection ensured');
+            logger_1.logger.info(`✅ [v2.1-${requestId}] MongoDB connection ensured`);
         }
         catch (connError) {
-            logger_1.logger.error('❌ [v2.0] connectDB() failed:', {
+            logger_1.logger.error(`❌ [v2.1-${requestId}] connectDB() failed:`, {
                 message: connError?.message,
                 name: connError?.name,
                 stack: connError?.stack
@@ -312,16 +317,16 @@ const googleSignIn = async (req, res) => {
         }
         // Check MongoDB connection state
         const readyState = mongoose_1.default.connection.readyState;
-        logger_1.logger.info('🔍 [v2.0] MongoDB readyState:', readyState);
+        logger_1.logger.info(`🔍 [v2.1-${requestId}] MongoDB readyState:`, readyState);
         if (readyState !== 1) {
-            logger_1.logger.error('❌ [v2.0] MongoDB not connected! readyState:', readyState);
+            logger_1.logger.error(`❌ [v2.1-${requestId}] MongoDB not connected! readyState:`, readyState);
             return res.status(503).json({
                 success: false,
                 message: 'Database connection not ready',
                 details: `ReadyState is ${readyState}, expected 1`
             });
         }
-        logger_1.logger.info('✅ [v2.0] MongoDB connection confirmed (readyState: 1)');
+        logger_1.logger.info(`✅ [v2.1-${requestId}] MongoDB connection confirmed (readyState: 1)`);
         const { token: googleToken, context } = req.body; // Add context parameter
         logger_1.logger.info('🔍 Step 1: Extracted token and context from request body', { context });
         if (!googleToken) {
