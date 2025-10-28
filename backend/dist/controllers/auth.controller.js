@@ -11,6 +11,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const User_1 = __importDefault(require("../models/User"));
 const logger_1 = require("../utils/logger");
 const google_auth_library_1 = require("google-auth-library");
+const mongodb_1 = require("../utils/mongodb");
 // In-memory OTP storage (in production, use Redis or similar)
 const otpStore = {};
 /**
@@ -290,7 +291,11 @@ exports.loginWithPassword = loginWithPassword;
 const googleSignIn = async (req, res) => {
     try {
         logger_1.logger.info('🔍 Google Sign-In Request: Starting function');
-        // Check MongoDB connection first
+        // Ensure MongoDB connection is established
+        logger_1.logger.info('🔌 Ensuring MongoDB connection...');
+        await (0, mongodb_1.connectDB)();
+        logger_1.logger.info('✅ MongoDB connection ensured');
+        // Check MongoDB connection state
         if (mongoose_1.default.connection.readyState !== 1) {
             logger_1.logger.error('❌ MongoDB not connected! readyState:', mongoose_1.default.connection.readyState);
             return res.status(503).json({
