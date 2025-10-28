@@ -7,6 +7,7 @@ exports.getClientConfig = exports.logout = exports.getCurrentUser = exports.goog
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const User_1 = __importDefault(require("../models/User"));
 const logger_1 = require("../utils/logger");
 const google_auth_library_1 = require("google-auth-library");
@@ -289,6 +290,16 @@ exports.loginWithPassword = loginWithPassword;
 const googleSignIn = async (req, res) => {
     try {
         logger_1.logger.info('🔍 Google Sign-In Request: Starting function');
+        // Check MongoDB connection first
+        if (mongoose_1.default.connection.readyState !== 1) {
+            logger_1.logger.error('❌ MongoDB not connected! readyState:', mongoose_1.default.connection.readyState);
+            return res.status(503).json({
+                success: false,
+                message: 'Database connection not ready',
+                details: 'Please try again in a moment'
+            });
+        }
+        logger_1.logger.info('✅ MongoDB connection confirmed (readyState: 1)');
         const { token: googleToken, context } = req.body; // Add context parameter
         logger_1.logger.info('🔍 Step 1: Extracted token and context from request body', { context });
         if (!googleToken) {
@@ -368,7 +379,28 @@ const googleSignIn = async (req, res) => {
         }
         // Find or create user
         logger_1.logger.info('👤 Finding/creating user for email:', email);
-        let user = await User_1.default.findOne({ email });
+        logger_1.logger.info('🔍 MongoDB state before query:', {
+            readyState: mongoose_1.default.connection.readyState,
+            host: mongoose_1.default.connection.host,
+            name: mongoose_1.default.connection.name
+        });
+        let user;
+        try {
+            user = await User_1.default.findOne({ email }).maxTimeMS(5000); // 5 second timeout
+            logger_1.logger.info('✅ User query completed:', { found: !!user });
+        }
+        catch (dbError) {
+            logger_1.logger.error('❌ Database query failed:', {
+                error: dbError?.message,
+                name: dbError?.name,
+                code: dbError?.code
+            });
+            return res.status(500).json({
+                success: false,
+                message: 'Database query failed',
+                details: dbError?.message || 'Unknown database error'
+            });
+        }
         // Handle registration context - check if user already exists
         if (context === 'register' && user) {
             logger_1.logger.info('👤 Registration attempted but user already exists');

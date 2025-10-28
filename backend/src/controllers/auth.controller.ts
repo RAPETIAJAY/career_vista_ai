@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
+import mongoose from 'mongoose';
 import User from '../models/User';
 import { logger } from '../utils/logger';
 import { OAuth2Client } from 'google-auth-library';
@@ -326,6 +327,17 @@ export const googleSignIn = async (req: Request, res: Response) => {
   try {
     logger.info('🔍 Google Sign-In Request: Starting function');
     
+    // Check MongoDB connection first
+    if (mongoose.connection.readyState !== 1) {
+      logger.error('❌ MongoDB not connected! readyState:', mongoose.connection.readyState);
+      return res.status(503).json({
+        success: false,
+        message: 'Database connection not ready',
+        details: 'Please try again in a moment'
+      });
+    }
+    logger.info('✅ MongoDB connection confirmed (readyState: 1)');
+    
     const { token: googleToken, context } = req.body; // Add context parameter
     logger.info('🔍 Step 1: Extracted token and context from request body', { context });
     
@@ -415,7 +427,28 @@ export const googleSignIn = async (req: Request, res: Response) => {
 
     // Find or create user
     logger.info('👤 Finding/creating user for email:', email);
-    let user = await User.findOne({ email });
+    logger.info('🔍 MongoDB state before query:', {
+      readyState: mongoose.connection.readyState,
+      host: mongoose.connection.host,
+      name: mongoose.connection.name
+    });
+    
+    let user;
+    try {
+      user = await User.findOne({ email }).maxTimeMS(5000); // 5 second timeout
+      logger.info('✅ User query completed:', { found: !!user });
+    } catch (dbError: any) {
+      logger.error('❌ Database query failed:', {
+        error: dbError?.message,
+        name: dbError?.name,
+        code: dbError?.code
+      });
+      return res.status(500).json({
+        success: false,
+        message: 'Database query failed',
+        details: dbError?.message || 'Unknown database error'
+      });
+    }
     
     // Handle registration context - check if user already exists
     if (context === 'register' && user) {
