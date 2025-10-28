@@ -29,7 +29,8 @@ const connectDB = async () => {
         });
         // Set mongoose options before connecting
         mongoose_1.default.set('strictQuery', false);
-        // REMOVED: bufferCommands: false - Allow mongoose to buffer commands during connection
+        // Increase buffer timeout for serverless cold starts
+        mongoose_1.default.set('bufferTimeoutMS', 30000);
         const result = await mongoose_1.default.connect(MONGODB_URI, {
             maxPoolSize: 10,
             minPoolSize: 2,

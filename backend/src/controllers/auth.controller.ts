@@ -5,6 +5,7 @@ import nodemailer from 'nodemailer';
 import User from '../models/User';
 import { logger } from '../utils/logger';
 import { OAuth2Client } from 'google-auth-library';
+import { connectDB } from '../utils/mongodb';
 
 // In-memory OTP storage (in production, use Redis or similar)
 const otpStore: Record<string, { otp: string; expires: Date }> = {};
@@ -325,6 +326,9 @@ export const loginWithPassword = async (req: Request, res: Response) => {
 export const googleSignIn = async (req: Request, res: Response) => {
   try {
     logger.info('🔍 Google Sign-In Request: Starting');
+    
+    // Ensure MongoDB connection
+    await connectDB();
     
     const { token: googleToken, context } = req.body;
     logger.info('🔍 Step 1: Extracted token and context from request body', { context });
