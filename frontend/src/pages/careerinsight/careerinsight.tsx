@@ -43,6 +43,7 @@ import {
   Engineering
 } from '@mui/icons-material';
 import { useAuth } from '../../utils/auth';
+import { getApiConfig } from '../../utils/config';
 import CareerInsightsLoginBanner from '../../components/CareerInsightsLoginBanner';
 
 interface CareerInsight {
@@ -223,10 +224,11 @@ const CareerInsights: React.FC = () => {
       // Progressive loading - load critical data first
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
+      const apiBaseURL = getApiConfig().baseURL;
 
       // Load main insights first for immediate display
       try {
-        const insightsRes = await fetch(`/api/career-insights/insights/${selectedStream}`, { headers });
+        const insightsRes = await fetch(`${apiBaseURL}/career-insights/insights/${selectedStream}`, { headers });
         const insights = await insightsRes.json();
         if (insights.success) {
           setCareerInsights(insights.insights || insights.data || null);
@@ -239,9 +241,9 @@ const CareerInsights: React.FC = () => {
 
       // Load remaining data in background
       Promise.all([
-        fetch(`/api/career-insights/skills/${selectedStream}`, { headers }),
-        fetch(`/api/career-insights/courses/${selectedStream}`, { headers }),
-        fetch(`/api/career-insights/employability/${selectedStream}`, { headers })
+        fetch(`${apiBaseURL}/career-insights/skills/${selectedStream}`, { headers }),
+        fetch(`${apiBaseURL}/career-insights/courses/${selectedStream}`, { headers }),
+        fetch(`${apiBaseURL}/career-insights/employability/${selectedStream}`, { headers })
       ]).then(async ([skillsRes, coursesRes, employabilityRes]) => {
         const [skills, courses, employability] = await Promise.all([
           skillsRes.json(),
