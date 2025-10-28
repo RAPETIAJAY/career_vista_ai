@@ -326,23 +326,40 @@ export const loginWithPassword = async (req: Request, res: Response) => {
  */
 export const googleSignIn = async (req: Request, res: Response) => {
   try {
-    logger.info('🔍 Google Sign-In Request: Starting function');
+    logger.info('🔍 [v2.0] Google Sign-In Request: Starting function');
+    logger.info('🔍 [v2.0] Request body keys:', Object.keys(req.body));
     
     // Ensure MongoDB connection is established
-    logger.info('🔌 Ensuring MongoDB connection...');
-    await connectDB();
-    logger.info('✅ MongoDB connection ensured');
+    logger.info('🔌 [v2.0] Ensuring MongoDB connection...');
+    try {
+      await connectDB();
+      logger.info('✅ [v2.0] MongoDB connection ensured');
+    } catch (connError: any) {
+      logger.error('❌ [v2.0] connectDB() failed:', {
+        message: connError?.message,
+        name: connError?.name,
+        stack: connError?.stack
+      });
+      return res.status(503).json({
+        success: false,
+        message: 'Failed to connect to database',
+        details: connError?.message
+      });
+    }
     
     // Check MongoDB connection state
-    if (mongoose.connection.readyState !== 1) {
-      logger.error('❌ MongoDB not connected! readyState:', mongoose.connection.readyState);
+    const readyState = mongoose.connection.readyState;
+    logger.info('🔍 [v2.0] MongoDB readyState:', readyState);
+    
+    if (readyState !== 1) {
+      logger.error('❌ [v2.0] MongoDB not connected! readyState:', readyState);
       return res.status(503).json({
         success: false,
         message: 'Database connection not ready',
-        details: 'Please try again in a moment'
+        details: `ReadyState is ${readyState}, expected 1`
       });
     }
-    logger.info('✅ MongoDB connection confirmed (readyState: 1)');
+    logger.info('✅ [v2.0] MongoDB connection confirmed (readyState: 1)');
     
     const { token: googleToken, context } = req.body; // Add context parameter
     logger.info('🔍 Step 1: Extracted token and context from request body', { context });
