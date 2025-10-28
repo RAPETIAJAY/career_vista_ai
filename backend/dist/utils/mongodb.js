@@ -29,16 +29,14 @@ const connectDB = async () => {
         });
         // Set mongoose options before connecting
         mongoose_1.default.set('strictQuery', false);
-        mongoose_1.default.set('bufferCommands', false); // Disable buffering to fail fast
-        // Use 8 seconds max for Vercel Hobby's 10-second limit (leave 2s for other operations)
+        // REMOVED: bufferCommands: false - Allow mongoose to buffer commands during connection
         const result = await mongoose_1.default.connect(MONGODB_URI, {
             maxPoolSize: 10,
             minPoolSize: 2,
-            serverSelectionTimeoutMS: 8000, // 8 seconds to stay under Vercel's 10s limit
+            serverSelectionTimeoutMS: 10000,
             socketTimeoutMS: 45000,
             family: 4,
-            connectTimeoutMS: 8000, // 8 seconds
-            heartbeatFrequencyMS: 10000,
+            connectTimeoutMS: 10000,
         });
         isConnected = true;
         logger_1.logger.info('✅ Connected to MongoDB', {

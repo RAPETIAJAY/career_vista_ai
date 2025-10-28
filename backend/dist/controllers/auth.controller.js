@@ -7,11 +7,9 @@ exports.getClientConfig = exports.logout = exports.getCurrentUser = exports.goog
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const User_1 = __importDefault(require("../models/User"));
 const logger_1 = require("../utils/logger");
 const google_auth_library_1 = require("google-auth-library");
-const mongodb_1 = require("../utils/mongodb");
 // In-memory OTP storage (in production, use Redis or similar)
 const otpStore = {};
 /**
@@ -286,48 +284,12 @@ const loginWithPassword = async (req, res) => {
 };
 exports.loginWithPassword = loginWithPassword;
 /**
- * Google Sign In - Version 2.1 - 2025-10-28T10:20:00Z
+ * Google Sign In
  */
 const googleSignIn = async (req, res) => {
-    const requestId = Math.random().toString(36).substring(7);
     try {
-        logger_1.logger.info(`🔍 [v2.1-${requestId}] Google Sign-In Request: Starting function`);
-        logger_1.logger.info(`🔍 [v2.1-${requestId}] Request body keys:`, Object.keys(req.body));
-        logger_1.logger.info(`🔍 [v2.1-${requestId}] Environment check:`, {
-            hasMongoUri: !!process.env.MONGODB_URI,
-            mongoUriLength: process.env.MONGODB_URI?.length || 0
-        });
-        // Ensure MongoDB connection is established
-        logger_1.logger.info(`🔌 [v2.1-${requestId}] Ensuring MongoDB connection...`);
-        try {
-            await (0, mongodb_1.connectDB)();
-            logger_1.logger.info(`✅ [v2.1-${requestId}] MongoDB connection ensured`);
-        }
-        catch (connError) {
-            logger_1.logger.error(`❌ [v2.1-${requestId}] connectDB() failed:`, {
-                message: connError?.message,
-                name: connError?.name,
-                stack: connError?.stack
-            });
-            return res.status(503).json({
-                success: false,
-                message: 'Failed to connect to database',
-                details: connError?.message
-            });
-        }
-        // Check MongoDB connection state
-        const readyState = mongoose_1.default.connection.readyState;
-        logger_1.logger.info(`🔍 [v2.1-${requestId}] MongoDB readyState:`, readyState);
-        if (readyState !== 1) {
-            logger_1.logger.error(`❌ [v2.1-${requestId}] MongoDB not connected! readyState:`, readyState);
-            return res.status(503).json({
-                success: false,
-                message: 'Database connection not ready',
-                details: `ReadyState is ${readyState}, expected 1`
-            });
-        }
-        logger_1.logger.info(`✅ [v2.1-${requestId}] MongoDB connection confirmed (readyState: 1)`);
-        const { token: googleToken, context } = req.body; // Add context parameter
+        logger_1.logger.info('🔍 Google Sign-In Request: Starting');
+        const { token: googleToken, context } = req.body;
         logger_1.logger.info('🔍 Step 1: Extracted token and context from request body', { context });
         if (!googleToken) {
             logger_1.logger.info('❌ No token provided');
@@ -406,28 +368,7 @@ const googleSignIn = async (req, res) => {
         }
         // Find or create user
         logger_1.logger.info('👤 Finding/creating user for email:', email);
-        logger_1.logger.info('🔍 MongoDB state before query:', {
-            readyState: mongoose_1.default.connection.readyState,
-            host: mongoose_1.default.connection.host,
-            name: mongoose_1.default.connection.name
-        });
-        let user;
-        try {
-            user = await User_1.default.findOne({ email }).maxTimeMS(5000); // 5 second timeout
-            logger_1.logger.info('✅ User query completed:', { found: !!user });
-        }
-        catch (dbError) {
-            logger_1.logger.error('❌ Database query failed:', {
-                error: dbError?.message,
-                name: dbError?.name,
-                code: dbError?.code
-            });
-            return res.status(500).json({
-                success: false,
-                message: 'Database query failed',
-                details: dbError?.message || 'Unknown database error'
-            });
-        }
+        let user = await User_1.default.findOne({ email });
         // Handle registration context - check if user already exists
         if (context === 'register' && user) {
             logger_1.logger.info('👤 Registration attempted but user already exists');
